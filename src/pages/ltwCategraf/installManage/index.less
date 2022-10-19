@@ -1,0 +1,92 @@
+.ltwminstall_leftArea {
+  flex: 3;
+  padding: 20px;
+  .ltwminstall_leftSelectItem {
+    margin-bottom: 10px;
+    .ant-select {
+      width: 100%;
+    }
+  }
+  .ltwminstall_leftFilter{
+    width: 100%;
+    display: flex;
+    flex-direction:row-reverse ;
+  }
+  .ltwminstall_leftAreaList {
+    margin-top: 10px;
+    // height: calc(100vh - 310px);
+    // overflow: auto;
+    .ant-table-wrapper {
+      width: 100%;
+      .ant-spin-nested-loading {
+        .ant-spin-container {
+          .ant-table-content {
+            height: calc(100vh - 374px);
+            overflow: auto;
+            .ant-table-thead {
+              position: sticky;
+              top: 0;
+              z-index: 1;
+            }
+          }
+        }
+      }
+    }
+    .ltw_cateClickRow {
+      background-color: rgba(108, 83, 177, 0.1);
+    }
+  }
+}
+.ltwminstall_rightArea {
+  flex: 4;
+  padding: 20px;
+  > .ant-spin-nested-loading {
+    > .ant-spin-container {
+      > .ant-table-wrapper {
+        width: 100%;
+        height: calc(100vh - 132px);
+        overflow: auto;
+      }
+    }
+  }
+}
+.ltwminstall_drawerArea {
+  padding: 20px;
+  .ltwminstall_drawerSelect {
+    display: flex;
+    margin-bottom: 15px;
+    .ltwminstall_drawerSelectLabel {
+      width: 90px;
+      line-height: 32px;
+    }
+    .ltwminstall_drawerSelectContent {
+      display: flex;
+      &.ltwminstall_drawerCheck {
+        width: 600px;
+        justify-content: flex-end;
+        .ltwminstall_drawerCheckTips {
+          margin-right: 8px;
+          line-height: 32px;
+        }
+      }
+      &.ltwminstall_drawerTable {
+        .ant-table-wrapper {
+          .ant-spin-nested-loading {
+            .ant-spin-container {
+              width: 600px;
+              .ant-table-content {
+                height: 400px;
+                overflow: auto;
+                .ant-table-thead {
+                  position: sticky;
+                  top: 0;
+                  z-index: 1;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

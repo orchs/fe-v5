@@ -1,0 +1,64 @@
+.ltwmoper_leftArea {
+  flex: 1;
+  padding: 20px;
+  .ltwmoper_inputArea {
+    display: flex;
+    .ltwmoper_inputLable {
+      width: 50px;
+      line-height: 32px;
+      color: rgba(0, 0, 0, 0.85);
+    }
+  }
+  .ltwmoper_leftAreaList {
+    margin-top: 10px;
+    height: calc(100vh - 152px);
+    overflow: auto;
+    .ltwmoper_leftListItem {
+      padding: 6px;
+      margin-bottom: 2px;
+      cursor: pointer;
+      &.active {
+        background-color: rgba(108, 83, 177, 0.1);
+      }
+      &:hover {
+        background-color: rgba(108, 83, 177, 0.1);
+      }
+    }
+  }
+}
+.ltwmoper_rightArea {
+  flex: 4;
+  padding: 20px;
+  overflow: auto;
+  .ltwmoper_rightSelectItem {
+    margin-right: 10px;
+  }
+  > .ant-spin-nested-loading {
+    > .ant-spin-container {
+      > .ant-table-wrapper {
+        width: 100%;
+        .ant-spin-nested-loading {
+          .ant-spin-container {
+            .ant-table-content {
+              height: calc(100vh - 197px);
+              overflow: auto;
+              .ant-table-thead {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+              }
+            }
+            .ant-pagination {
+              margin: 10px 0 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.ltw_operInlineItem {
+  display: inline-block;
+  margin-left: 10px;
+  width: 48%;
+}

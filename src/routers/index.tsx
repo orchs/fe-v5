@@ -69,6 +69,8 @@ import RecordingRule from '@/pages/recordingRules';
 import RecordingRuleAdd from '@/pages/recordingRules/add';
 import RecordingRuleEdit from '@/pages/recordingRules/edit';
 import { dynamicPackages, Entry } from '@/utils';
+import operLog from '@/pages/ltwCategraf/operLog';
+import installManage from '@/pages/ltwCategraf/installManage';
 
 const Packages = dynamicPackages();
 let lazyRoutes = Packages.reduce((result: any, module: Entry) => {
@@ -174,6 +176,8 @@ export default function Content() {
         <Route exact path='/help/source' component={Datasource} />
         <Route exact path='/help/source/:action/:cate/:type' component={DatasourceAdd} />
         <Route exact path='/help/source/:action/:cate/:type/:id' component={DatasourceAdd} />
+        <Route exact path='/operLog' component={operLog} />
+        <Route exact path='/installManage' component={installManage} />
 
         {lazyRoutes.map((route, i) => (
           <RouteWithSubRoutes key={i} {...route} />

@@ -19,7 +19,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 import { Menu, Button } from 'antd';
-import Icon, { MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined } from '@ant-design/icons';
+import Icon, { MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined, SettingFilled } from '@ant-design/icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import querystring from 'query-string';
@@ -61,6 +61,21 @@ const defaultSelectedKey = (menus: any, pathname) => {
 const SideMenu: FC = () => {
   const { t, i18n } = useTranslation();
   const menuList = [
+    {
+      key: 'monitorList',
+      icon: <SettingFilled />,
+      title: t('categraf管理'),
+      children: [
+        {
+          key: '/installManage',
+          title: t('安装管理'),
+        },
+        {
+          key: '/operLog',
+          title: t('操作日志'),
+        },
+      ],
+    },
     {
       key: 'targets',
       // icon: <DatabaseOutlined />,

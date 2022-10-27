@@ -23,6 +23,7 @@ const index = (_props: any) => {
   const [name, setName] = useState("");
   const [ip, setIp] = useState("");
   const [status, setStatus] = useState("");
+  const [freshFlag, setFreshFlag] = useState(false);
   const [detailDrawer, setDetailDrawer] = useState(false);
   const [detail, setDetail] = useState({
     hostname: "",
@@ -82,7 +83,7 @@ const index = (_props: any) => {
     return `共 ${total} 条`;
   };
   const { tableProps } = useAntdTable(featchData, {
-    refreshDeps: [name, ip, status],
+    refreshDeps: [name, ip, status,freshFlag],
     defaultPageSize: 15,
   });
   function get_logList(ips?: string, monitorName?: string, statusText?: string) {
@@ -241,17 +242,19 @@ const index = (_props: any) => {
               <Button
                 icon={<ReloadOutlined />}
                 onClick={() => {
-                  setTableLoading(true);
-                  getLogList({ name: name, ip: ip, status: status }).then(
-                    (res) => {
-                      // setTableProps(res.dat.list);
-                      setTableLoading(false);
-                    },
-                    (err) => {
-                      message.error(err);
-                      setTableLoading(false);
-                    }
-                  );
+                  setFreshFlag(!freshFlag)
+                  // setTableLoading(true);
+                  // getLogList({ name: name, ip: ip, status: status }).then(
+                  //   (res) => {
+                  //     // setTableProps(res.dat.list);
+
+                  //     setTableLoading(false);
+                  //   },
+                  //   (err) => {
+                  //     message.error(err);
+                  //     setTableLoading(false);
+                  //   }
+                  // );
                 }}
               />
               <Select

@@ -895,7 +895,7 @@ const index = (_props: any) => {
             <div className='ltwminstall_drawerSelect'>
               <div className='ltwminstall_drawerSelectLabel'>{t('配置文件')}:</div>
               <div className='ltwminstall_drawerSelectContent ' style={{ width: '700px' }}>
-                <Editor value={local_toml} height='50vh' readOnly={false} onChange={(value) => setlLocal_toml(value)} />
+                <Editor value={local_toml} height='55vh' readOnly={false} onChange={(value) => setlLocal_toml(value)} />
               </div>
             </div>
           </div>

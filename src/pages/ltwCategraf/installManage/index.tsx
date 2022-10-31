@@ -227,7 +227,7 @@ const index = (_props: any) => {
   }
   //批量安装/卸载 categraf
   function cate_installAll() {
-    let text = '批量安装成功！';
+    let text = '已开始安装，稍后请刷新页面查看...';
     if (modalAllOper == 'UPDATE') {
       text = '批量更新成功！';
     } else if (modalAllOper == 'UNINSTALL') {
@@ -276,10 +276,10 @@ const index = (_props: any) => {
         return '更新';
       case 'UNINSTALL':
         return '卸载';
-      case 'DISABLED':
+      case 'DISABLE':
         return '禁用';
       default:
-        return '';
+        return val;
     }
   }
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
@@ -298,12 +298,10 @@ const index = (_props: any) => {
     {
       title: t('主机名'),
       dataIndex: 'hostname',
-      align: 'center',
     },
     {
       title: t('IP'),
       dataIndex: 'ip',
-      align: 'center',
       width: 100,
       className: 'ltw_noPaddingColumn',
     },
@@ -335,15 +333,13 @@ const index = (_props: any) => {
       title: t('版本'),
       dataIndex: 'version',
       align: 'center',
-      width: 60,
+      width: 100,
       className: 'ltw_noPaddingColumn',
     },
     {
       title: t('table.operations'),
-      // dataIndex: 'actions',
-      align: 'center',
       width: 104,
-      className: 'ltw_operButtonColumn',
+      className: 'ltw_noPaddingColumn',
       render: (_text, record, index) => {
         let status = record.status;
         const actions = record.actions;
@@ -394,12 +390,12 @@ const index = (_props: any) => {
     {
       title: t('监控项名称'),
       dataIndex: 'name',
-      width: 200,
+      width: 140,
     },
     {
       title: t('状态'),
       dataIndex: 'status',
-      width: 100,
+      width: 60,
       render: (text, record, index) => {
         // 参数分别为当前行的值，当前行数据，行索引
         let color = 'default';
@@ -420,12 +416,14 @@ const index = (_props: any) => {
     {
       title: t('更新人'),
       dataIndex: 'update_by',
-      width: 100,
+      width: 80,
+      className: 'ltw_noPaddingColumn',
     },
     {
       title: t('更新时间'),
       dataIndex: 'update_at',
       width: 160,
+      className: 'ltw_noPaddingColumn',
       render: (text) => {
         if (!text) {
           return '';
@@ -436,7 +434,8 @@ const index = (_props: any) => {
     },
     {
       title: t('table.operations'),
-      width: 220,
+      width: 150,
+      className: 'ltw_noPaddingColumn',
       render: (_text, record) => {
         return (
           <span>
@@ -571,6 +570,7 @@ const index = (_props: any) => {
               <Select
                 onChange={(value: string) => {
                   setStatus(value);
+                  setSelectedRowKeys([]);
                 }}
                 allowClear
                 placeholder='请选择状态'
@@ -895,7 +895,7 @@ const index = (_props: any) => {
             <div className='ltwminstall_drawerSelect'>
               <div className='ltwminstall_drawerSelectLabel'>{t('配置文件')}:</div>
               <div className='ltwminstall_drawerSelectContent ' style={{ width: '700px' }}>
-                <Editor value={local_toml} height='300px' readOnly={false} onChange={(value) => setlLocal_toml(value)} />
+                <Editor value={local_toml} height='50vh' readOnly={false} onChange={(value) => setlLocal_toml(value)} />
               </div>
             </div>
           </div>

@@ -1,12 +1,7 @@
 .ltwminstall_leftArea {
   flex: 5;
   padding: 15px;
-  .ltwminstall_leftAreaForm {
-    // display: flex;
-    // flex-wrap: wrap;
-  }
   .ltwminstall_leftSelectItem {
-    // display: inline-block;
     margin-bottom: 14px;
     margin-right: 6px;
     .ant-select {
@@ -83,13 +78,16 @@
         }
       }
     }
+    .ant-table-tbody > tr.ltw_cateClickRow > td {
+      background-color: rgba(32, 12, 86, 0.1) !important;
+    }
     .ltw_cateClickRow {
-      background-color: rgba(108, 83, 177, 0.1);
+      background-color: rgba(32, 12, 86, 0.1);
     }
   }
 }
 .ltwminstall_rightArea {
-  flex: 3;
+  flex: 3.5;
   padding: 20px;
   > .ant-spin-nested-loading {
     > .ant-spin-container {
@@ -99,6 +97,9 @@
         overflow: auto;
       }
     }
+  }
+  .ltw_noPaddingColumn {
+    padding: 5px 8px;
   }
 }
 .ltwminstall_drawerArea {
@@ -156,7 +157,7 @@
 }
 .ltwminstall_modalArea {
   padding: 10px;
-  height: 350px;
+  height: 60vh;
   .ltwminstall_drawerSelect {
     display: flex;
     margin-bottom: 10px;

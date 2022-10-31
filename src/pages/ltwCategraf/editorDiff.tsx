@@ -6,10 +6,11 @@ import 'ace-builds/src-noconflict/theme-monokai';
 import 'ace-builds/src-noconflict/theme-kuroir';
 interface Props {
   height: string;
+  width: string;
   readOnly: boolean;
-  value: string;
-  value2: string;
-  onChange?: (value: string[]) => void;
+  oldValue: string;
+  newValue: string;
+  onChange?: (values: string[]) => void;
   placeholder?: string;
 }
 export default function Editor(props: Props) {
@@ -17,14 +18,14 @@ export default function Editor(props: Props) {
     <DiffEditor
       mode='elixir'
       theme='kuroir'
-      value={[props.value, props.value2]}
-      height='1000px'
-      width='1034px'
+      value={[props.oldValue, props.newValue]}
+      height={props.height}
+      width={props.width}
       style={{ background: '#fff677' }}
       readOnly={props.readOnly}
-      onChange={(newValue) => {
+      onChange={(values) => {
         if (props.onChange) {
-          props.onChange(newValue);
+          props.onChange(values);
         }
       }}
     />

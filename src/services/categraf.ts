@@ -50,7 +50,7 @@ export const deleteMonitor = function (id) {
 };
 //下发 安装 categraf
 export const cateInstall = function (data) {
-  return request(`/api/ltw/hosts/ctf/`, {
+  return request(`/api/ltw/hosts/ctf`, {
     method: RequestMethod.Post,
     data,
   });

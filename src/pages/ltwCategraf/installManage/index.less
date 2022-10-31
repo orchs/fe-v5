@@ -1,19 +1,44 @@
 .ltwminstall_leftArea {
-  flex: 3;
-  padding: 20px;
+  flex: 5;
+  padding: 15px;
+  .ltwminstall_leftAreaForm {
+    // display: flex;
+    // flex-wrap: wrap;
+  }
   .ltwminstall_leftSelectItem {
-    margin-bottom: 10px;
+    // display: inline-block;
+    margin-bottom: 14px;
+    margin-right: 6px;
     .ant-select {
-      width: 100%;
+      width: 130px;
+    }
+    .ant-input-affix-wrapper {
+      width: 130px;
+    }
+    &.ltwminstall_leftSelectItemHost {
+      .ant-input-affix-wrapper {
+        width: 240px;
+      }
     }
   }
-  .ltwminstall_leftFilter {
-    width: 100%;
-    display: flex;
-    flex-direction: row-reverse;
+  .ltwminstall_rightAreaButton {
+    .ltwButtonUpdate {
+      background-color: #81d3f8;
+      border-color: #81d3f8;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+    .ltwButtonSetting {
+      background-color: #bfbf00;
+      border-color: #bfbf00;
+      &:hover {
+        opacity: 0.8;
+      }
+    }
   }
   .ltwminstall_leftAreaList {
-    margin-top: 10px;
+    // margin-top: 10px;
     // height: calc(100vh - 310px);
     // overflow: auto;
     .ant-table-wrapper {
@@ -21,16 +46,38 @@
       .ant-spin-nested-loading {
         .ant-spin-container {
           .ant-table-content {
-            height: calc(100vh - 374px);
+            height: calc(100vh - 280px);
             overflow: auto;
             .ant-table-thead {
               position: sticky;
               top: 0;
               z-index: 1;
             }
+            .ltw_operButtonColumn {
+              padding: 5px 8px 5px 0;
+            }
+            .ltw_noPaddingColumn {
+              padding: 5px 8px;
+            }
             .ltw_operButton {
               margin-left: 8px;
-              margin-top: 2px;
+              color: @primary-color;
+              text-decoration: underline;
+            }
+            .ltw_operButtonINSTALL {
+              color: @primary-color;
+            }
+            .ltw_operButtonENABLE {
+              color: #52c41a;
+            }
+            .ltw_operButtonUPDATE {
+              color: #81d3f8;
+            }
+            .ltw_operButtonUNINSTALL {
+              color: #ff4d4f;
+            }
+            .ltw_operButtonDISABLED {
+              color: #98918c;
             }
           }
         }
@@ -42,7 +89,7 @@
   }
 }
 .ltwminstall_rightArea {
-  flex: 4;
+  flex: 3;
   padding: 20px;
   > .ant-spin-nested-loading {
     > .ant-spin-container {
@@ -104,6 +151,18 @@
           }
         }
       }
+    }
+  }
+}
+.ltwminstall_modalArea {
+  padding: 10px;
+  height: 350px;
+  .ltwminstall_drawerSelect {
+    display: flex;
+    margin-bottom: 10px;
+    .ltwminstall_drawerSelectLabel {
+      width: 90px;
+      line-height: 32px;
     }
   }
 }

@@ -339,6 +339,7 @@ const index = (_props: any) => {
     {
       title: t('table.operations'),
       width: 120,
+      align: 'center',
       className: 'ltw_noPaddingColumn',
       render: (_text, record, index) => {
         let status = record.status;
@@ -645,7 +646,7 @@ const index = (_props: any) => {
               >
                 {t('批量配置')}
               </Button>
-              <Button
+              {/* <Button
                 type='primary'
                 danger
                 onClick={() => {
@@ -664,7 +665,7 @@ const index = (_props: any) => {
                 }}
               >
                 {t('批量卸载')}
-              </Button>
+              </Button> */}
             </Space>
             </Form.Item>
           </Form>

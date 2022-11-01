@@ -109,24 +109,24 @@ const index = (_props: any) => {
   }, []);
   const columns: ColumnProps<logItem>[] = [
     {
-      title: t("监控类型"),
+      title: t("操作类型"),
       dataIndex: "name",
       className: "minWidth",
-      width: 100,
+      width: 120,
     },
     {
       title: t("主机名"),
       dataIndex: "hostname",
-      width: 280,
     },
     {
       title: t("IP"),
       dataIndex: "ip",
-      width: 160,
+      width: 130,
     },
     {
       title: t("状态"),
       dataIndex: "status",
+      align: 'center',
       width: 80,
       render: (text, record, index) => {
         // 参数分别为当前行的值，当前行数据，行索引
@@ -140,14 +140,20 @@ const index = (_props: any) => {
       },
     },
     {
+      title: t("信息"),
+      dataIndex: "message",
+    },
+    {
       title: t("执行人"),
+      width: 80,
       dataIndex: "update_by",
     },
     {
-      title: t("执行时间"),
+      title: t("操作时间"),
       dataIndex: "update_at",
-      width: 160,
+      align: 'center',
       defaultSortOrder: "descend",
+      width: 160,
       sorter: (a, b) => a.update_at - b.update_at,
       render: (text) => {
         return moment.unix(text).format("YYYY-MM-DD HH:mm:ss");
@@ -156,6 +162,7 @@ const index = (_props: any) => {
     {
       title: t("table.operations"),
       width: 120,
+      align: 'center',
       render: (_text, record) => {
         return (
           <span>

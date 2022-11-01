@@ -338,7 +338,7 @@ const index = (_props: any) => {
     },
     {
       title: t('table.operations'),
-      width: 104,
+      width: 120,
       className: 'ltw_noPaddingColumn',
       render: (_text, record, index) => {
         let status = record.status;
@@ -587,10 +587,7 @@ const index = (_props: any) => {
                   已启用
                 </Option>
               </Select>
-            </Form.Item>
-          </Form>
-          <div className='ltwminstall_rightAreaButton'>
-            <Space>
+            <Space className='ltwminstall_rightAreaButton'>
               <Button
                 type='primary'
                 onClick={() => {
@@ -669,7 +666,8 @@ const index = (_props: any) => {
                 {t('批量卸载')}
               </Button>
             </Space>
-          </div>
+            </Form.Item>
+          </Form>
           <Spin spinning={hostLoading} delay={200}>
             <div className='ltwminstall_leftAreaList'>
               <Table

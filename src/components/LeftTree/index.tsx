@@ -30,6 +30,7 @@ import classNames from 'classnames';
 
 const CheckboxGroup = Checkbox.Group;
 type ChangeFunction = (value: any, item?: any) => void;
+const ltwGroupIds = [1001,1002,1003,1004,1005,1006,1007,1008,1009,1010,1011,1012,1013,1014,1017]
 
 interface groupProps {
   isShow?: boolean;
@@ -188,7 +189,8 @@ const busiGroupContent = (busiGroupProps: BusiGroupProps): IGroupItemProps => {
   const dispatch = useDispatch();
   const { busiGroups, curBusiItem } = useSelector<RootState, CommonStoreState>((state) => state.common);
   const { alertings } = useSelector<RootState, eventStoreState>((state) => state.event);
-  const [filteredBusiGroups, setFilteredBusiGroups] = useState(busiGroups);
+  const ltwGroups = busiGroups.filter((i) => i.id in ltwGroupIds)
+  const [filteredBusiGroups, setFilteredBusiGroups] = useState(ltwGroups);
   const showNotGroupItem = busiGroupProps.showNotGroupItem;
   // 初始化，当不展示 [未归组对象] 时，选中第一条业务组
   if (!localStorage.getItem('curBusiItem') && !showNotGroupItem && busiGroups.length > 0) {
@@ -216,7 +218,8 @@ const busiGroupContent = (busiGroupProps: BusiGroupProps): IGroupItemProps => {
   // 初始化展示所有业务组
   useEffect(() => {
     if (!filteredBusiGroups.length) {
-      setFilteredBusiGroups(busiGroups);
+      const ltwGroups = busiGroups.filter((i) => i.id in ltwGroupIds)
+      setFilteredBusiGroups(ltwGroups);
     }
   }, [busiGroups]);
 
@@ -242,12 +245,14 @@ const busiGroupContent = (busiGroupProps: BusiGroupProps): IGroupItemProps => {
               const value = e.currentTarget.value;
               if (value) {
                 getBusiGroups(value).then((res) => {
-                  setFilteredBusiGroups(res.dat || []);
+                  const ltwGroups = res.dat.filter((i) => i.id in ltwGroupIds)
+                  setFilteredBusiGroups(ltwGroups || []);
                 });
               } else {
                 getBusiGroups('').then((res) => {
                   const data = res.dat || [];
-                  setFilteredBusiGroups(data);
+                  const ltwGroups = data.filter((i) => i.id in ltwGroupIds)
+                  setFilteredBusiGroups(ltwGroups);
                   dispatch({
                     type: 'common/saveData',
                     prop: 'busiGroups',

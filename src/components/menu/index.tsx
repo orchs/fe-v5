@@ -19,7 +19,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Menu, Button } from 'antd';
-import Icon, { MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined, SettingFilled, AlertOutlined } from '@ant-design/icons';
+import Icon, {AimOutlined, MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined, SettingFilled, AlertOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import querystring from 'query-string';
@@ -76,17 +76,17 @@ const SideMenu: FC = () => {
         },
       ],
     },
-    // {
-    //   key: 'targets',
-    //   icon: <AimOutlined />,
-    //   label: t('监控对象'),
-    //   children: [
-    //     {
-    //       key: '/targets',
-    //       label: t('对象列表'),
-    //     },
-    //   ],
-    // },
+    {
+      key: 'targets',
+      icon: <AimOutlined />,
+      label: t('监控对象'),
+      children: [
+        {
+          key: '/targets',
+          label: t('对象列表'),
+        },
+      ],
+    },
     {
       key: 'monitor',
       icon: <LineChartOutlined />,

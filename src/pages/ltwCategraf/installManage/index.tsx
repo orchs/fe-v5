@@ -12,6 +12,7 @@ import { getMonitorList, getHostList, getMonitorListUhost, allInstall, install, 
 import './index.less';
 // import internal from 'stream';
 import DiffEditor from '../editorDiff';
+import { removeDashboard } from '@/services';
 
 const index = (_props: any) => {
   const { Option } = Select;
@@ -290,7 +291,7 @@ const index = (_props: any) => {
     selectedRowKeys,
     onChange: onSelectChange,
     getCheckboxProps: (record: RecordType) => ({
-      disabled: !record.port || !record.admin_user, // 当端口与管理信息字段为空时，设置该行不允许被选中
+      disabled: !record.port || !record.admin_user || !record.ip, // 当端口与管理信息字段为空时，设置该行不允许被选中
     }),
   };
   // 左侧主机表格
@@ -303,6 +304,20 @@ const index = (_props: any) => {
       title: t('IP'),
       dataIndex: 'ip',
       width: 100,
+      className: 'ltw_noPaddingColumn',
+    },
+    {
+      title: t('端口'),
+      dataIndex: 'port',
+      align: 'center',
+      width: 60,
+      className: 'ltw_noPaddingColumn',
+    },
+    {
+      title: t('管理信息'),
+      dataIndex: 'admin_user',
+      width: 120,
+      align: 'center',
       className: 'ltw_noPaddingColumn',
     },
     {

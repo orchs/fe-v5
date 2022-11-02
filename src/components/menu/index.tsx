@@ -67,11 +67,11 @@ const SideMenu: FC = () => {
       label: t('categraf管理'),
       children: [
         {
-          key: '/installManage',
+          key: '/ctf/manager',
           label: t('安装管理'),
         },
         {
-          key: '/operLog',
+          key: '/ctf/logs',
           label: t('操作日志'),
         },
       ],

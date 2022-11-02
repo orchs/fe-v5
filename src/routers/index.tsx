@@ -176,8 +176,8 @@ export default function Content() {
         <Route exact path='/help/source' component={Datasource} />
         <Route exact path='/help/source/:action/:cate/:type' component={DatasourceAdd} />
         <Route exact path='/help/source/:action/:cate/:type/:id' component={DatasourceAdd} />
-        <Route exact path='/operLog' component={operLog} />
-        <Route exact path='/installManage' component={installManage} />
+        <Route exact path='/ctf/logs' component={operLog} />
+        <Route exact path='/ctf/manager' component={installManage} />
 
         {lazyRoutes.map((route, i) => (
           <RouteWithSubRoutes key={i} {...route} />

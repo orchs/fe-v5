@@ -243,6 +243,8 @@ const index = (_props: any) => {
       },
       (err) => {
         message.error(err);
+        setConfirmLoading(false);
+        setHostLoading(false);
         setModalVisibleAll(false);
       },
     );

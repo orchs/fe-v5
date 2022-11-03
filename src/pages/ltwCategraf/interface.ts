@@ -2,7 +2,10 @@ export interface RecordType {
   hostname: string;
   ip: string;
   private_ip: string;
-  status: string
+  status: string;
+  actions: string[];
+  port: string;
+  admin_user: string;
 }
 export interface monitorType {
   indexes: string;
@@ -16,7 +19,7 @@ export interface monitorItem {
   remote_toml: string;
   local_toml: string;
   template_toml: string;
-  status: string
+  status: string;
 }
 export interface logItem {
   id: number;

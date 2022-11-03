@@ -72,15 +72,19 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/api/n9e': {
-        target: 'http://10.206.0.11:9000/',
+        target: 'http://localhost:18000/',
         changeOrigin: true,
       },
       '/api/v1/': {
-        target: 'http://10.206.0.11:9000/',
+        target: 'http://localhost:18000/',
         changeOrigin: true,
       },
       '/api/fc-brain': {
-        target: 'http://10.206.0.11:9000/',
+        target: 'http://localhost:18000/',
+        changeOrigin: true,
+      },
+      '/api/ltw': {
+        target: 'http://localhost:18000/',
         changeOrigin: true,
       },
     },
@@ -120,6 +124,7 @@ export default defineConfig({
 
           // 下面是云眼的全局样式
           'primary-color': '#6C53B1',
+          'primary-background': '#F0ECF9',
           'disabled-color': 'rgba(0, 0, 0, 0.5)',
           'tabs-ink-bar-color': 'linear-gradient(to right, #9F4CFC, #0019F4 )',
           'font-size-base': '12px',

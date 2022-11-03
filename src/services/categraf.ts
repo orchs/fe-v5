@@ -1,5 +1,5 @@
-import request from "@/utils/request";
-import { RequestMethod } from "@/store/common";
+import request from '@/utils/request';
+import { RequestMethod } from '@/store/common';
 //获取主机列表
 export const getHostList = function (params) {
   return request(`/api/ltw/hosts`, {
@@ -15,7 +15,7 @@ export const getMonitorList = function () {
 };
 //获取日志列表
 export const getLogList = function (params) {
-  return request(`/api/ltw/hosts/ctf/conf/logs/`, {
+  return request(`/api/ltw/hosts/ctf/conf/logs`, {
     method: RequestMethod.Get,
     params,
   });
@@ -49,9 +49,9 @@ export const deleteMonitor = function (id) {
   });
 };
 //下发 安装 categraf
-export const cateInstall = function (meth,data) {
-  return request(`/api/ltw/hosts/ctf/`, {
-    method: meth=="post"?RequestMethod.Post: RequestMethod.Delete,
+export const cateInstall = function (data) {
+  return request(`/api/ltw/hosts/ctf`, {
+    method: RequestMethod.Post,
     data,
   });
 };

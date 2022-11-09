@@ -75,7 +75,7 @@ export default function index(props: IProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   let _chartHeight = hasLegend ? '70%' : '100%';
   let _tableHeight = hasLegend ? '30%' : '0px';
-
+  const quantileValues = [0.95, 0.8];
   if (!inDashboard) {
     _chartHeight = chartHeight;
     _tableHeight = tableHeight;
@@ -135,6 +135,39 @@ export default function index(props: IProps) {
     setSeriesData(series);
   }, [JSON.stringify(series)]);
 
+  function calc(): any[] {
+    let steps = _.cloneDeep(options?.thresholds?.steps);
+    let data = _.cloneDeep(series[0].data);
+    let numericalValue = 0;
+    const flag = _.some(options?.thresholds?.steps, (item) => {
+      if (item.value !== null && quantileValues.includes(item.value)) {
+        numericalValue = item.value;
+      }
+      return item.value !== null && quantileValues.includes(item.value);
+    });
+    if (flag) {
+      let temp;
+      for (var i = 0; i < data.length - 1; i++) {
+        for (var j = 0; j < data.length - i - 1; j++) {
+          if (data[j]['1'] > data[j + 1]['1']) {
+            temp = data[j];
+            data[j] = data[j + 1];
+            data[j + 1] = temp;
+          }
+        }
+      }
+      const score = data[Math.ceil(data.length * numericalValue)]['1'];
+      let stepsArr = _.cloneDeep(values.options.thresholds?.steps);
+      if (stepsArr && stepsArr.length > 0) {
+        for (let i = 0; i < steps.length; i++)
+          if (stepsArr[i] && stepsArr[i].value !== null && quantileValues.includes(stepsArr[i].value)) {
+            stepsArr[i].value = score;
+          }
+      }
+      steps = stepsArr;
+    }
+    return steps;
+  }
   useEffect(() => {
     let xAxisDamin = {};
     if (time) {
@@ -192,7 +225,7 @@ export default function index(props: IProps) {
           max: options?.standardOptions?.max,
           scale: scaleDistribution,
           plotLines: _.map(
-            _.filter(options?.thresholds?.steps, (item) => {
+            _.filter(calc(), (item) => {
               return item.value !== null; // 过滤掉 base 值
             }),
             (item) => {

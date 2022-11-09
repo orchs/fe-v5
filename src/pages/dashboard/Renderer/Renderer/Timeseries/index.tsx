@@ -137,7 +137,6 @@ export default function index(props: IProps) {
 
   function calc(): any[] {
     let steps = _.cloneDeep(options?.thresholds?.steps);
-    let data = _.cloneDeep(series[0].data);
     let numericalValue = 0;
     const flag = _.some(options?.thresholds?.steps, (item) => {
       if (item.value !== null && quantileValues.includes(item.value)) {
@@ -147,16 +146,26 @@ export default function index(props: IProps) {
     });
     if (flag) {
       let temp;
-      for (var i = 0; i < data.length - 1; i++) {
-        for (var j = 0; j < data.length - i - 1; j++) {
-          if (data[j]['1'] > data[j + 1]['1']) {
-            temp = data[j];
-            data[j] = data[j + 1];
-            data[j + 1] = temp;
+      let seriseLength = series.length;
+      let sortedData: any[] = [];
+      series[0].data.map((item, index) => {
+        let yData: any[] = [];
+        for (let m = 0; m < seriseLength; m++) {
+          yData.push(series[m].data[index]);
+        }
+        yData = _.orderBy(yData, ['1'], ['asc']);
+        sortedData.push(yData[seriseLength - 1]);
+      });
+      for (var i = 0; i < sortedData.length - 1; i++) {
+        for (var j = 0; j < sortedData.length - i - 1; j++) {
+          if (sortedData[j]['1'] > sortedData[j + 1]['1']) {
+            temp = sortedData[j];
+            sortedData[j] = sortedData[j + 1];
+            sortedData[j + 1] = temp;
           }
         }
       }
-      const score = data[Math.ceil(data.length * numericalValue)]['1'];
+      const score = sortedData[Math.ceil(sortedData.length * numericalValue)]['1'];
       let stepsArr = _.cloneDeep(values.options.thresholds?.steps);
       if (stepsArr && stepsArr.length > 0) {
         for (let i = 0; i < steps.length; i++)

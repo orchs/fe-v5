@@ -165,7 +165,8 @@ export default function index(props: IProps) {
           }
         }
       }
-      const score = sortedData[Math.ceil(sortedData.length * numericalValue)]['1'].toFixed(3);
+      let score = sortedData[Math.ceil(sortedData.length * numericalValue)]['1'];
+      score = score ? Number(score).toFixed(3) : score;
       let stepsArr = _.cloneDeep(values.options.thresholds?.steps);
       if (stepsArr && stepsArr.length > 0) {
         for (let i = 0; i < steps.length; i++)

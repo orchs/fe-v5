@@ -68,23 +68,23 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/n9e-plus': {
-        target: 'http://10.206.0.7:29001/',
+        target: 'https://monit-stg.fastsdwan.com/',
         changeOrigin: true,
       },
       '/api/n9e': {
-        target: 'http://localhost:18000/',
+        target: 'https://monit-stg.fastsdwan.com/',
         changeOrigin: true,
       },
       '/api/v1/': {
-        target: 'http://localhost:18000/',
+        target: 'https://monit-stg.fastsdwan.com/',
         changeOrigin: true,
       },
       '/api/fc-brain': {
-        target: 'http://localhost:18000/',
+        target: 'https://monit-stg.fastsdwan.com/',
         changeOrigin: true,
       },
       '/api/ltw': {
-        target: 'http://localhost:18000/',
+        target: 'https://monit-stg.fastsdwan.com/',
         changeOrigin: true,
       },
     },

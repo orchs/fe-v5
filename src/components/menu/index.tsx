@@ -19,7 +19,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Menu, Button } from 'antd';
-import Icon, {AimOutlined, MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined, SettingFilled, AlertOutlined } from '@ant-design/icons';
+import Icon, { AimOutlined, MenuUnfoldOutlined, MenuFoldOutlined, LineChartOutlined, CodeOutlined, SettingFilled, AlertOutlined, OrderedListOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import querystring from 'query-string';
@@ -73,6 +73,21 @@ const SideMenu: FC = () => {
         {
           key: '/ctf/logs',
           label: t('操作日志'),
+        },
+      ],
+    },
+    {
+      key: 'workManage',
+      icon: <OrderedListOutlined />,
+      label: t('排班管理'),
+      children: [
+        {
+          key: '/work/orderManage',
+          label: t('排班管理'),
+        },
+        {
+          key: '/work/orderRange',
+          label: t('班次设置'),
         },
       ],
     },

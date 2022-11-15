@@ -35,7 +35,7 @@ import { getTeamInfo } from '@/services/manage';
 import { TeamInfo, User } from '@/store/manageInterface';
 import { userInfo } from 'os';
 interface Props {
-  bgid?: number;
+  bgid: number;
 }
 type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
@@ -45,9 +45,9 @@ interface EditableCellProps {
   children: React.ReactNode;
   dataIndex: keyof recordType2;
   record: recordType2;
-  handleSave: (record: recordType2, weekInfo, oldData: recordType[], year, week) => void;
+  handleSave: (record: recordType2, weekInfo, oldData: recordType[], year, week, bgId) => void;
 }
-const PageTable: React.FC<Props> = ({ bgid }) => {
+const RightTable: React.FC<Props> = ({ bgid }) => {
   const { Option } = Select;
   const { t } = useTranslation();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
@@ -188,11 +188,12 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
     const save = async () => {
       try {
         const oldData = _.cloneDeep(oldTableData);
-        const values = await form.validateFields();
         const oldyear = year;
         const oldweek = week;
+        const values = await form.validateFields();
+        const bgId = bgid;
         toggleEdit();
-        handleSave({ ...record, ...values }, values, oldData, oldyear, oldweek);
+        handleSave({ ...record, ...values }, values, oldData, oldyear, oldweek, bgId);
       } catch (errInfo) {
         message.error(errInfo);
       }
@@ -246,11 +247,21 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
   useEffect(() => {
     if (bgid) {
       getTeamMemberList(bgid.toString());
-      if (year && week) {
-        get_teamOrders(year, week);
+      if (!time) {
+        const newYear = moment().toObject().years;
+        const newWeek = moment().week();
+        setYear(newYear);
+        setWeek(newWeek);
+        getTheader(newYear, newWeek);
+        get_teamOrders(newYear, newWeek);
+      } else {
+        if (year && week) {
+          get_teamOrders(year, week);
+        }
       }
     }
   }, [bgid]);
+
   function translateUserInfo(userIds: number[] | string | number): string {
     let userInfo = '';
     if (!Array.isArray(userIds)) {
@@ -311,13 +322,11 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
         const table = _.clone(dat);
         setTableData(translateData(dat));
       }
-      setLoading(false);
     }
     setLoading(false);
   };
 
-  const handleSave = (row: recordType, weekInfo, oldData: recordType[], oldyear, oldweek) => {
-    setLoading(true);
+  const handleSave = (row: recordType, weekInfo, oldData: recordType[], oldyear, oldweek, bgId) => {
     const index = oldData.findIndex((item) => row.duty_conf_id === item.duty_conf_id);
     const item = oldData[index];
     let duty_date = '';
@@ -331,10 +340,16 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
       duty_date,
       duty_conf_id: row.duty_conf_id,
     };
-    operateOreders(8, data).then((res) => {
-      message.success(t('数据更新成功！'));
-      get_teamOrders(oldyear, oldweek);
-    });
+    operateOreders(bgId, data)
+      .then(
+        (res) => {},
+        (err) => {
+          message.error(t(err));
+        },
+      )
+      .finally(() => {
+        get_teamOrders(oldyear, oldweek);
+      });
   };
   function getTheader(year: number, week: number): void {
     getTimeHeader(year, week).then(
@@ -378,6 +393,9 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
             <DatePicker
               onChange={(value) => {
                 setTime(value);
+                if (!value) {
+                  return;
+                }
                 const year = moment(value).toObject().years;
                 const week = moment(value).week();
                 setYear(year);
@@ -385,7 +403,7 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
                 getTheader(year, week);
                 get_teamOrders(year, week);
               }}
-              // defaultValue={moment()}
+              defaultValue={moment()}
               format={`YYYY年第${moment(time).week()}周`}
               picker='week'
               value={time}
@@ -464,4 +482,4 @@ const PageTable: React.FC<Props> = ({ bgid }) => {
   );
 };
 
-export default PageTable;
+export default RightTable;

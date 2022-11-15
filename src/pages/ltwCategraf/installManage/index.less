@@ -16,27 +16,21 @@
       }
     }
   }
-  .ltwminstall_rightAreaButton {
-    margin-left: 10px;
-    .ltwButtonUpdate {
-      background-color: #81d3f8;
-      border-color: #81d3f8;
-      &:hover {
-        opacity: 0.8;
-      }
+  .ltwButtonUpdate {
+    background-color: #81d3f8;
+    border-color: #81d3f8;
+    &:hover {
+      opacity: 0.8;
     }
-    .ltwButtonSetting {
-      background-color: #bfbf00;
-      border-color: #bfbf00;
-      &:hover {
-        opacity: 0.8;
-      }
+  }
+  .ltwButtonSetting {
+    background-color: #bfbf00;
+    border-color: #bfbf00;
+    &:hover {
+      opacity: 0.8;
     }
   }
   .ltwminstall_leftAreaList {
-    // margin-top: 10px;
-    // height: calc(100vh - 310px);
-    // overflow: auto;
     .ant-table-wrapper {
       width: 100%;
       .ant-spin-nested-loading {
@@ -165,6 +159,14 @@
     .ltwminstall_drawerSelectLabel {
       width: 90px;
       line-height: 32px;
+    }
+  }
+}
+
+.left-area {
+  &.collapse {
+    .ltwminstall_leftArea {
+      display: none;
     }
   }
 }

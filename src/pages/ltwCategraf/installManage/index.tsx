@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Editor from '../editor';
-import { Table, Divider, Popconfirm, Tag, Input, Button, message, Select, Drawer, Form, Spin, Space, Modal } from 'antd';
-import { SearchOutlined, ControlOutlined } from '@ant-design/icons';
+import { Table, Divider, Popconfirm, Tag, Input, Button, message, Select, Drawer, Form, Spin, Modal } from 'antd';
+import { SearchOutlined, ControlOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { ColumnProps } from 'antd/lib/table';
 import _ from 'lodash';
 import moment from 'moment';
@@ -13,6 +13,7 @@ import './index.less';
 // import internal from 'stream';
 import DiffEditor from '../editorDiff';
 import { removeDashboard } from '@/services';
+import { Resizable } from 're-resizable';
 
 const index = (_props: any) => {
   const { Option } = Select;
@@ -58,6 +59,8 @@ const index = (_props: any) => {
   const [modalContentAll, setModalContentAll] = useState('');
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const [collapse, setCollapse] = useState(localStorage.getItem('leftlist') === '1');
+  const [width, setWidth] = useState(_.toNumber(localStorage.getItem('leftwidth') || 330));
   //获取监控列表（下拉选择）
   function get_monitorList() {
     getMonitorList().then(
@@ -286,15 +289,17 @@ const index = (_props: any) => {
         return val;
     }
   }
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+  const onSelectChange = (newSelectedRowKeys: React.Key[], selectedRows: RecordType[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
+    setSelectedRows(selectedRows);
   };
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [selectedRows, setSelectedRows] = useState<RecordType[]>([]);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
     getCheckboxProps: (record: RecordType) => ({
-      disabled: !record.port || !record.admin_user || !record.ip, // 当端口与管理信息字段为空时，设置该行不允许被选中
+      disabled: !record.port || !record.admin_user || !record.ip, // 当端口 管理信息 ip字段为空时，设置该行不允许被选中
     }),
   };
   // 左侧主机表格
@@ -507,164 +512,199 @@ const index = (_props: any) => {
         </>
       }
     >
-      <div style={{ display: 'flex' }}>
-        <div className='ltwminstall_leftArea'>
-          <Form layout='inline' className='ltwminstall_leftAreaForm'>
-            {' '}
-            <Form.Item label='监控项:' className='ltwminstall_leftSelectItem'>
-              <Select onChange={changeMonitor} allowClear showSearch value={name}>
-                {monitorList.map((item) => (
-                  <Option key={item} value={item}>
-                    {item}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item label='索引项:' className='ltwminstall_leftSelectItem'>
-              <Select onChange={changeIndexes} allowClear value={key} placeholder='请选择索引值'>
-                {currentFieldsList.map((item) => (
-                  <Option key={item} value={item}>
-                    {item}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item label='索引值:' className='ltwminstall_leftSelectItem'>
-              <Input
-                ref={searchRef}
-                prefix={<SearchOutlined />}
-                onChange={(e) => {
-                  setValue(e.currentTarget.value);
-                }}
-                placeholder='请输入索引值'
-                allowClear
-                onPressEnter={(e) => {
-                  if (!name && !query) {
-                    message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
-                    return;
-                  }
-                  setHostList([]);
-                  setHostLoading(true);
-                  get_hostList();
-                }}
-              />
-            </Form.Item>
-            <Form.Item label='主机:' className='ltwminstall_leftSelectItem ltwminstall_leftSelectItemHost'>
-              <Input
-                ref={searchRef}
-                prefix={<SearchOutlined />}
-                onChange={(e) => {
-                  setQuery(e.currentTarget.value);
-                }}
-                onPressEnter={(e) => {
-                  if (!name && !query) {
-                    message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
-                    return;
-                  }
-                  setHostList([]);
-                  setHostLoading(true);
-                  get_hostList();
-                }}
-                placeholder='请输入主机名/ip查询'
-                allowClear
-              />
-            </Form.Item>
-            <Button
-              type='primary'
-              style={{ marginRight: 6 }}
+      <div className='strategy-content'>
+        <Resizable
+          style={{
+            marginRight: collapse ? 0 : 10,
+          }}
+          size={{ width: collapse ? 0 : width, height: '100%' }}
+          enable={{
+            right: collapse ? false : true,
+          }}
+          onResizeStop={(e, direction, ref, d) => {
+            let curWidth = width + d.width;
+            if (curWidth < 330) {
+              curWidth = 330;
+            }
+            setWidth(curWidth);
+            localStorage.setItem('leftwidth', curWidth.toString());
+          }}
+        >
+          <div className={collapse ? 'left-area collapse' : 'left-area'}>
+            <div
+              className='collapse-btn'
               onClick={() => {
-                if (!name && !query) {
-                  message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
-                  return;
-                }
-                setSelectedRowKeys([]);
-                setHostList([]);
-                setHostLoading(true);
-                get_hostList();
+                localStorage.setItem('leftlist', !collapse ? '1' : '0');
+                setCollapse(!collapse);
               }}
             >
-              {t('查询')}
-            </Button>
-            <Form.Item label='状态:' className='ltwminstall_leftSelectItem'>
-              <Select
-                onChange={(value: string) => {
-                  setStatus(value);
-                  setSelectedRowKeys([]);
-                }}
-                allowClear
-                placeholder='请选择状态'
-                style={{ width: 130 }}
-                defaultValue=''
-              >
-                <Option key='UNINSTALLED' value='UNINSTALLED'>
-                  未安装
-                </Option>
-                <Option key='DISABLED' value='DISABLED'>
-                  未启用
-                </Option>
-                <Option key='ENABLED' value='ENABLED'>
-                  已启用
-                </Option>
-              </Select>
-            <Space className='ltwminstall_rightAreaButton'>
-              <Button
-                type='primary'
-                onClick={() => {
-                  if (selectedRowKeys.length == 0) {
-                    message.warning(t('未选择任何主机，请选择!'));
-                    return;
-                  }
-                  let content = '确定要在  ';
-                  const arrLength = selectedRowKeys.length;
-                  selectedRowKeys.forEach((ele, index) => {
-                    if (index != arrLength - 1) {
-                      content += ele + '、 ';
-                    } else {
-                      content += ele;
+              {!collapse ? <LeftOutlined /> : <RightOutlined />}
+            </div>
+
+            <div className='ltwminstall_leftArea'>
+              <Form layout='inline' className='ltwminstall_leftAreaForm'>
+                <Form.Item label='监控项:' className='ltwminstall_leftSelectItem'>
+                  <Select onChange={changeMonitor} allowClear showSearch value={name}>
+                    {monitorList.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item label='索引项:' className='ltwminstall_leftSelectItem'>
+                  <Select onChange={changeIndexes} allowClear value={key} placeholder='请选择索引值'>
+                    {currentFieldsList.map((item) => (
+                      <Option key={item} value={item}>
+                        {item}
+                      </Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+                <Form.Item label='索引值:' className='ltwminstall_leftSelectItem'>
+                  <Input
+                    ref={searchRef}
+                    prefix={<SearchOutlined />}
+                    onChange={(e) => {
+                      setValue(e.currentTarget.value);
+                    }}
+                    placeholder='请输入索引值'
+                    allowClear
+                    onPressEnter={(e) => {
+                      if (!name && !query) {
+                        message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
+                        return;
+                      }
+                      setHostList([]);
+                      setHostLoading(true);
+                      get_hostList();
+                    }}
+                  />
+                </Form.Item>
+                <Form.Item label='主机:' className='ltwminstall_leftSelectItem ltwminstall_leftSelectItemHost'>
+                  <Input
+                    ref={searchRef}
+                    prefix={<SearchOutlined />}
+                    onChange={(e) => {
+                      setQuery(e.currentTarget.value);
+                    }}
+                    onPressEnter={(e) => {
+                      if (!name && !query) {
+                        message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
+                        return;
+                      }
+                      setHostList([]);
+                      setHostLoading(true);
+                      get_hostList();
+                    }}
+                    placeholder='请输入主机名/ip查询'
+                    allowClear
+                  />
+                </Form.Item>
+                <Button
+                  type='primary'
+                  style={{ marginRight: 6 }}
+                  onClick={() => {
+                    if (!name && !query) {
+                      message.warning(t('请至少选中一个监控项或者输入主机名称/IP进行查询操作'));
+                      return;
                     }
-                  });
-                  content += '  上安装categraf服务？';
-                  setModalContentAll(content);
-                  setmodalAllOper('INSTALL');
-                  setModalVisibleAll(true);
-                }}
-              >
-                {t('批量安装')}
-              </Button>
-              <Button
-                type='primary'
-                className='ltwButtonUpdate'
-                onClick={() => {
-                  if (selectedRowKeys.length == 0) {
-                    message.warning(t('未选择任何主机，请选择!'));
-                    return;
-                  }
-                  let content = '确定要更新 ';
-                  selectedRowKeys.forEach((ele) => {
-                    content += ele;
-                  });
-                  content += '   上的categraf服务？';
-                  setModalContentAll(content);
-                  setmodalAllOper('UPDATE');
-                  setModalVisibleAll(true);
-                }}
-              >
-                {t('批量更新')}
-              </Button>
-              <Button
-                type='primary'
-                className='ltwButtonSetting'
-                onClick={() => {
-                  if (selectedRowKeys.length == 0) {
-                    message.warning(t('未选择任何主机，请选择!'));
-                    return;
-                  }
-                  setBatchDrawer(true);
-                }}
-              >
-                {t('批量配置')}
-              </Button>
-              {/* <Button
+                    setSelectedRowKeys([]);
+                    setHostList([]);
+                    setHostLoading(true);
+                    get_hostList();
+                  }}
+                >
+                  {t('查询')}
+                </Button>
+                <Form.Item label='状态:' className='ltwminstall_leftSelectItem'>
+                  <Select
+                    onChange={(value: string) => {
+                      setStatus(value);
+                      setSelectedRowKeys([]);
+                    }}
+                    allowClear
+                    placeholder='请选择状态'
+                    style={{ width: 130 }}
+                    defaultValue=''
+                  >
+                    <Option key='UNINSTALLED' value='UNINSTALLED'>
+                      未安装
+                    </Option>
+                    <Option key='DISABLED' value='DISABLED'>
+                      未启用
+                    </Option>
+                    <Option key='ENABLED' value='ENABLED'>
+                      已启用
+                    </Option>
+                  </Select>
+                </Form.Item>
+
+                <Button
+                  type='primary'
+                  style={{ marginRight: 6 }}
+                  onClick={() => {
+                    if (selectedRowKeys.length == 0) {
+                      message.warning(t('未选择任何主机，请选择!'));
+                      return;
+                    }
+                    let content = '确定要在  ';
+                    const arrLength = selectedRowKeys.length;
+                    selectedRows.forEach((ele, index) => {
+                      if (index != arrLength - 1) {
+                        content += ele.hostname + ',';
+                      } else {
+                        content += ele.hostname;
+                      }
+                    });
+                    content += '  上安装categraf服务？';
+                    setModalContentAll(content);
+                    setmodalAllOper('INSTALL');
+                    setModalVisibleAll(true);
+                  }}
+                >
+                  {t('批量安装')}
+                </Button>
+                <Button
+                  type='primary'
+                  style={{ marginRight: 6 }}
+                  className='ltwButtonUpdate'
+                  onClick={() => {
+                    if (selectedRowKeys.length == 0) {
+                      message.warning(t('未选择任何主机，请选择!'));
+                      return;
+                    }
+                    let content = '确定要更新 ';
+                    const arrLength = selectedRowKeys.length;
+                    selectedRows.forEach((ele, index) => {
+                      if (index != arrLength - 1) {
+                        content += ele.hostname + ',';
+                      } else {
+                        content += ele.hostname;
+                      }
+                    });
+                    content += '   上的categraf服务？';
+                    setModalContentAll(content);
+                    setmodalAllOper('UPDATE');
+                    setModalVisibleAll(true);
+                  }}
+                >
+                  {t('批量更新')}
+                </Button>
+                <Button
+                  type='primary'
+                  className='ltwButtonSetting'
+                  onClick={() => {
+                    if (selectedRowKeys.length == 0) {
+                      message.warning(t('未选择任何主机，请选择!'));
+                      return;
+                    }
+                    setBatchDrawer(true);
+                  }}
+                >
+                  {t('批量配置')}
+                </Button>
+                {/* <Button
                 type='primary'
                 danger
                 onClick={() => {
@@ -684,50 +724,51 @@ const index = (_props: any) => {
               >
                 {t('批量卸载')}
               </Button> */}
-            </Space>
-            </Form.Item>
-          </Form>
-          <Spin spinning={hostLoading} delay={200}>
-            <div className='ltwminstall_leftAreaList'>
-              <Table
-                rowKey={(record) => record.ip}
-                columns={columns1}
-                dataSource={hostList.filter((ele) => {
-                  if (!status) {
-                    return true;
-                  }
-                  return ele.status == status;
-                })}
-                onRow={(record) => {
-                  return {
-                    onClick: (e) => {
-                      setTableProps([]);
-                      setCurrentHost({ hostname: record.hostname, ip: record.ip });
-                      if (record.status !== 'ENABLED') {
-                        return;
+              </Form>
+              <Spin spinning={hostLoading} delay={200}>
+                <div className='ltwminstall_leftAreaList'>
+                  <Table
+                    rowKey={(record) => record.ip}
+                    columns={columns1}
+                    dataSource={hostList.filter((ele) => {
+                      if (!status) {
+                        return true;
                       }
-                      setTableLoading(true);
-                      get_monitorListUhost(record.ip);
-                    },
-                  };
-                }}
-                rowClassName={(record) => {
-                  return currentHost.ip == record.ip ? 'ltw_cateClickRow' : '';
-                }}
-                pagination={
-                  {
-                    showSizeChanger: true,
-                    pageSizeOptions: ['10', '50', '100', '500', '1000'],
-                    showTotal: (total) => {
-                      return i18n.language == 'en' ? `Total ${total} items` : `共 ${total} 条`;
-                    },
-                  } as any
-                }
-                rowSelection={rowSelection}
-              />
+                      return ele.status == status;
+                    })}
+                    onRow={(record) => {
+                      return {
+                        onClick: (e) => {
+                          setTableProps([]);
+                          setCurrentHost({ hostname: record.hostname, ip: record.ip });
+                          if (record.status !== 'ENABLED') {
+                            return;
+                          }
+                          setTableLoading(true);
+                          get_monitorListUhost(record.ip);
+                        },
+                      };
+                    }}
+                    rowClassName={(record) => {
+                      return currentHost.ip == record.ip ? 'ltw_cateClickRow' : '';
+                    }}
+                    pagination={
+                      {
+                        showSizeChanger: true,
+                        pageSizeOptions: ['10', '50', '100', '500', '1000'],
+                        showTotal: (total) => {
+                          return i18n.language == 'en' ? `Total ${total} items` : `共 ${total} 条`;
+                        },
+                      } as any
+                    }
+                    rowSelection={rowSelection}
+                  />
+                </div>
+              </Spin>
             </div>
-          </Spin>
-        </div>
+          </div>
+        </Resizable>
+
         <div className='ltwminstall_rightArea'>
           <Spin spinning={tableLoading} delay={200}>
             <Table
@@ -747,6 +788,7 @@ const index = (_props: any) => {
             />
           </Spin>
         </div>
+
         {/* 单独配置 */}
         <Drawer
           title={drawerTitle}

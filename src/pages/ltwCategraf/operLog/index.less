@@ -1,6 +1,5 @@
 .ltwmoper_leftArea {
   flex: 1;
-  padding: 20px;
   .ltwmoper_inputArea {
     display: flex;
     .ltwmoper_inputLable {
@@ -28,7 +27,7 @@
 }
 .ltwmoper_rightArea {
   flex: 4;
-  padding: 20px;
+  padding: 16px;
   overflow: auto;
   .ltwmoper_rightSelectItem {
     margin-right: 10px;
@@ -61,4 +60,11 @@
   display: inline-block;
   margin-left: 10px;
   width: 48%;
+}
+.left-area {
+  &.collapse {
+    .ltwmoper_leftArea {
+      display: none;
+    }
+  }
 }

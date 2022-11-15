@@ -71,8 +71,8 @@ import RecordingRuleEdit from '@/pages/recordingRules/edit';
 import { dynamicPackages, Entry } from '@/utils';
 import operLog from '@/pages/ltwCategraf/operLog';
 import installManage from '@/pages/ltwCategraf/installManage';
-import orderManage from '@/pages/ltwWorkforceManage/orderManage';
-import orderRange from '@/pages/ltwWorkforceManage/orderRange';
+import orderManage from '@/pages/ltwGroups/orderManage';
+import orderRange from '@/pages/ltwGroups/orderRange';
 
 const Packages = dynamicPackages();
 let lazyRoutes = Packages.reduce((result: any, module: Entry) => {

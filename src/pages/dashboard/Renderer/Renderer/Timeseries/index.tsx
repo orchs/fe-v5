@@ -158,10 +158,12 @@ export default function index(props: IProps) {
       });
       for (var i = 0; i < sortedData.length - 1; i++) {
         for (var j = 0; j < sortedData.length - i - 1; j++) {
-          if (sortedData[j]['1'] > sortedData[j + 1]['1']) {
-            temp = sortedData[j];
-            sortedData[j] = sortedData[j + 1];
-            sortedData[j + 1] = temp;
+          if (sortedData[j] && sortedData[j + 1]) {
+            if (sortedData[j]['1'] && sortedData[j + 1]['1'] && sortedData[j]['1'] > sortedData[j + 1]['1']) {
+              temp = sortedData[j];
+              sortedData[j] = sortedData[j + 1];
+              sortedData[j + 1] = temp;
+            }
           }
         }
       }

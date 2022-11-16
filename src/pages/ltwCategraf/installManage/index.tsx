@@ -60,7 +60,7 @@ const index = (_props: any) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [collapse, setCollapse] = useState(localStorage.getItem('leftlist') === '1');
-  const [width, setWidth] = useState(330);
+  const [width, setWidth] = useState(_.toNumber(localStorage.getItem('lefInstalltwidth') || 800));
   //获取监控列表（下拉选择）
   function get_monitorList() {
     getMonitorList().then(
@@ -523,11 +523,11 @@ const index = (_props: any) => {
           }}
           onResizeStop={(e, direction, ref, d) => {
             let curWidth = width + d.width;
-            if (curWidth < 330) {
-              curWidth = 330;
+            if (curWidth < 800) {
+              curWidth = 800;
             }
             setWidth(curWidth);
-            localStorage.setItem('leftwidth', curWidth.toString());
+            localStorage.setItem('lefInstalltwidth', curWidth.toString());
           }}
         >
           <div className={collapse ? 'left-area collapse' : 'left-area'}>

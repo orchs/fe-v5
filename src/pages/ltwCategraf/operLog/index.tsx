@@ -42,7 +42,7 @@ const index = (_props: any) => {
   const [currentPage, setCurrentPage] = useState('15');
   const [totalNum, setTotalNum] = useState('');
   const [collapse, setCollapse] = useState(localStorage.getItem('leftlist') === '1');
-  const [width, setWidth] = useState(_.toNumber(localStorage.getItem('leftwidth') || 330));
+  const [width, setWidth] = useState(_.toNumber(localStorage.getItem('lefOpertwidth') || 330));
   function get_monitorList() {
     getMonitorList().then(
       (res) => {
@@ -217,7 +217,7 @@ const index = (_props: any) => {
               curWidth = 330;
             }
             setWidth(curWidth);
-            localStorage.setItem('leftwidth', curWidth.toString());
+            localStorage.setItem('lefOpertwidth', curWidth.toString());
           }}
         >
           <div className={collapse ? 'left-area collapse' : 'left-area'}>

@@ -90,13 +90,13 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
     },
     {
       title: '',
-      dataIndex: 'thursday',
+      dataIndex: 'wednesday',
       width: 120,
       editable: true,
     },
     {
       title: '',
-      dataIndex: 'wednesday',
+      dataIndex: 'thursday',
       width: 120,
       editable: true,
     },
@@ -360,6 +360,11 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
         ...item2,
         [key]: weekInfo[key],
       });
+    }
+    const time = moment();
+    const currentTime = '' + time.toObject().years + (time.toObject().months + 1) + time.toObject().date;
+    if (Number(currentTime) >= Number(duty_date)) {
+      return;
     }
     const data = {
       user_ids,

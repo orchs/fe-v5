@@ -60,7 +60,7 @@ const index = (_props: any) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const [collapse, setCollapse] = useState(localStorage.getItem('leftlist') === '1');
-  const [width, setWidth] = useState(_.toNumber(localStorage.getItem('leftwidth') || 330));
+  const [width, setWidth] = useState(330);
   //获取监控列表（下拉选择）
   function get_monitorList() {
     getMonitorList().then(

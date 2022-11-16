@@ -45,7 +45,7 @@ interface EditableCellProps {
   children: React.ReactNode;
   dataIndex: keyof recordType2;
   record: recordType2;
-  handleSave: (record: recordType2, weekInfo, oldData: recordType[], year, week, bgId) => void;
+  handleSave: (record: recordType2, weekInfo, oldData: recordType[], year, week, bgId, currentTableData: recordType2[]) => void;
 }
 const RightTable: React.FC<Props> = ({ bgid }) => {
   const { Option } = Select;
@@ -162,7 +162,7 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
       </Form>
     );
   };
-  // 获取团队成员详情
+  // 获取团队成员列表
   const getTeamMemberList = (id: string) => {
     getTeamInfo(id).then((data: TeamInfo) => {
       setMemberList(data.users);
@@ -188,12 +188,13 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
     const save = async () => {
       try {
         const oldData = _.cloneDeep(oldTableData);
+        const currentTableData = _.cloneDeep(tableData);
         const oldyear = year;
         const oldweek = week;
         const values = await form.validateFields();
         const bgId = bgid;
         toggleEdit();
-        handleSave({ ...record, ...values }, values, oldData, oldyear, oldweek, bgId);
+        handleSave({ ...record, ...values }, values, oldData, oldyear, oldweek, bgId, currentTableData);
       } catch (errInfo) {
         message.error(errInfo);
       }
@@ -283,8 +284,8 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
     let weekData: weekType = {
       monday: [],
       tuesday: [],
-      thursday: [],
       wednesday: [],
+      thursday: [],
       friday: [],
       saturday: [],
       sunday: [],
@@ -295,16 +296,27 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
           item[name].persons.map((items) => {
             userids.push(items.user_id);
           });
-          weekData[name] = userids;
+          let uesrArr = _.cloneDeep(userids);
+          weekData[name] = uesrArr;
         }
         userids = [];
       }
+      let calcWeekData = _.cloneDeep(weekData);
       array.push({
-        ...weekData,
+        ...calcWeekData,
         duty_conf_id: item.duty_conf_id,
         duty_conf_name: item.duty_conf_name,
         duty_range_time: item.duty_range_time,
       });
+      weekData = {
+        monday: [],
+        tuesday: [],
+        wednesday: [],
+        thursday: [],
+        friday: [],
+        saturday: [],
+        sunday: [],
+      };
     });
     return array;
   }
@@ -326,30 +338,42 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
     setLoading(false);
   };
 
-  const handleSave = (row: recordType, weekInfo, oldData: recordType[], oldyear, oldweek, bgId) => {
+  const handleSave = (
+    row: recordType,
+    weekInfo: { [x: string]: number[] },
+    oldData: recordType[],
+    oldyear: number,
+    oldweek: number,
+    bgId: number,
+    currentTableData: recordType2[],
+  ) => {
+    const newData = _.cloneDeep(currentTableData);
     const index = oldData.findIndex((item) => row.duty_conf_id === item.duty_conf_id);
     const item = oldData[index];
     let duty_date = '';
     let user_ids: number[] = [];
+    const item2 = currentTableData[index];
     for (let key in weekInfo) {
       user_ids = weekInfo[key];
       duty_date = item[key].duty_date;
+      newData.splice(index, 1, {
+        ...item2,
+        [key]: weekInfo[key],
+      });
     }
     const data = {
       user_ids,
       duty_date,
       duty_conf_id: row.duty_conf_id,
     };
-    operateOreders(bgId, data)
-      .then(
-        (res) => {},
-        (err) => {
-          message.error(t(err));
-        },
-      )
-      .finally(() => {
+    setTableData(newData);
+    operateOreders(bgId, data).then(
+      (res) => {},
+      (err) => {
+        message.error(t(err));
         get_teamOrders(oldyear, oldweek);
-      });
+      },
+    );
   };
   function getTheader(year: number, week: number): void {
     getTimeHeader(year, week).then(

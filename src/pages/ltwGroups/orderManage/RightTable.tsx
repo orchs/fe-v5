@@ -364,6 +364,7 @@ const RightTable: React.FC<Props> = ({ bgid }) => {
     const time = moment();
     const currentTime = '' + time.toObject().years + (time.toObject().months + 1) + time.toObject().date;
     if (Number(currentTime) >= Number(duty_date)) {
+      message.error('修改排班失败，不能对历史班次进行修改！');
       return;
     }
     const data = {
